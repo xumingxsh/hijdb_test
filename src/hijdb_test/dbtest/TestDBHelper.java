@@ -16,6 +16,7 @@ import HiJUtil.HiTypeHelper;
 import HiJUtil.Generic.IEventRet;
 import HiJUtil.Generic.IEventRet8Param;
 import HiJUtil.Generic.IResult;
+import HiJUtil.Generic.HiResult;
 
 public class TestDBHelper {
 	String url = "jdbc:mysql://localhost:3306/information_schema";
@@ -95,33 +96,7 @@ public class TestDBHelper {
 
 		DBOperate db = new DBOperate(url, "root", "root", DBOperate.MySQL);
 		try {
-			final IResult<List<CharactersetsPO>> result = new IResult<List<CharactersetsPO>>(){
-
-				@Override
-				public boolean GetIsSuccess() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public List<CharactersetsPO> Get() {
-					// TODO Auto-generated method stub
-					return lst;
-				}
-				
-				List<CharactersetsPO> lst;
-
-				@Override
-				public void Set(List<CharactersetsPO> t) {
-					lst = t;
-				}
-
-				@Override
-				public boolean SetIsSuccess() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-			};
+			final HiResult<List<CharactersetsPO>> result = new HiResult<List<CharactersetsPO>>();
 			boolean ret = db.ExecuteQuery("SELECT  CHARACTER_SET_NAME,  DEFAULT_COLLATE_NAME,  DESCRIPTION,  MAXLEN FROM Character_sets ", new IEventRet8Param<Boolean, ResultSet>(){
 
 				@Override
@@ -139,6 +114,7 @@ public class TestDBHelper {
 				}
 				
 			});
+			Assert.assertTrue(ret);
 			Assert.assertTrue(result.Get() != null);
 			for (int i = 0; i < result.Get().size(); i++) {
 				String str = HiTypeHelper.ToString(CharactersetsPO.class, result.Get().get(i));
