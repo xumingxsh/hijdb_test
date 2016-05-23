@@ -12,6 +12,7 @@ import HiJDB.DBHelper;
 import HiJDB.DBOperate;
 import HiJDB.ICreator;
 import HiJDB.Creator.MySQLCreator;
+import HiJUtil.HiTypeHelper;
 import HiJUtil.Generic.IEventRet;
 import HiJUtil.Generic.IEventRet8Param;
 import HiJUtil.Generic.IResult;
@@ -139,10 +140,14 @@ public class TestDBHelper {
 				
 			});
 			Assert.assertTrue(result.Get() != null);
+			for (int i = 0; i < result.Get().size(); i++) {
+				String str = HiTypeHelper.ToString(CharactersetsPO.class, result.Get().get(i));
+				System.out.print(str);
+				System.out.print("\r\n");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 }
