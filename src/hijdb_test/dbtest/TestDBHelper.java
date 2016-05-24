@@ -2,7 +2,6 @@ package hijdb_test.dbtest;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,7 +14,6 @@ import HiJDB.Creator.MySQLCreator;
 import HiJUtil.HiTypeHelper;
 import HiJUtil.Generic.IEventRet;
 import HiJUtil.Generic.IEventRet8Param;
-import HiJUtil.Generic.IResult;
 import HiJUtil.Generic.HiResult;
 
 public class TestDBHelper {
@@ -125,5 +123,33 @@ public class TestDBHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	@Test
+	public void Test_DBHelper_ExecuteQuery_list() {
+		DBOperate db = new DBOperate(url, "root", "root", DBOperate.MySQL);
+		List<CharactersetsPO> lst = db.ExecuteQuery(CharactersetsPO.class, "SELECT  CHARACTER_SET_NAME,  DEFAULT_COLLATE_NAME,  DESCRIPTION,  MAXLEN FROM Character_sets ");
+		Assert.assertTrue(lst!= null);
+		for (int i = 0; i < lst.size(); i++) {
+			String str = HiTypeHelper.ToString(CharactersetsPO.class, lst.get(i));
+			System.out.print(str);
+			System.out.print("\r\n");
+		}
+	}
+	@Test
+	public void Test_DBHelper_ExecuteQuery_Single() {
+		DBOperate db = new DBOperate(url, "root", "root", DBOperate.MySQL);
+		CharactersetsPO ret =  db.ExecuteQuerySingle(CharactersetsPO.class, "SELECT  CHARACTER_SET_NAME,  DEFAULT_COLLATE_NAME,  DESCRIPTION,  MAXLEN FROM Character_sets limit 1");
+		Assert.assertTrue(ret!= null);
+		String str = HiTypeHelper.ToString(CharactersetsPO.class, ret);
+		System.out.print(str);
+		System.out.print("\r\n");
+	}
+	@Test
+	public void Test_DBHelper_ExecuteQuery_Single_null() {
+		DBOperate db = new DBOperate(url, "root", "root", DBOperate.MySQL);
+		CharactersetsPO ret =  db.ExecuteQuerySingle(CharactersetsPO.class, "SELECT  CHARACTER_SET_NAME,  DEFAULT_COLLATE_NAME,  DESCRIPTION,  MAXLEN FROM Character_sets where 1!=1");
+		Assert.assertTrue(ret == null);
+		String str = HiTypeHelper.ToString(CharactersetsPO.class, ret);
+		Assert.assertEquals(str, "");
 	}
 }
