@@ -39,7 +39,7 @@ public class TestDBProvider {
 		}
 	}
 	@Test
-	public void Test_DBHelper_ExecuteQuery_list_on_param() {
+	public void Test_ExecuteQuery_list_on_param() {
 		List<CharactersetsPO> lst = DataProvider.ExecuteQuery(CharactersetsPO.class, "Data.Character_sets.Query", 
 				new  IEventRet8Param<String, String>(){
 
@@ -83,7 +83,7 @@ public class TestDBProvider {
 		}
 	}
 	@Test
-	public void Test_DBHelper_ExecuteQuery_list_using_param() {
+	public void Test_ExecuteQuery_list_using_param() {
 		List<CharactersetsPO> lst = DataProvider.ExecuteQuery(CharactersetsPO.class, "Data.Character_sets.Query2");
 		Assert.assertTrue(lst!= null);
 		for (int i = 0; i < lst.size(); i++) {
@@ -91,6 +91,51 @@ public class TestDBProvider {
 			System.out.print(str);
 			System.out.print("\r\n");
 		}
+	}
+	@Test
+	public void Test_ExecuteQuery_Single() {
+		CharactersetsPO ret =  DataProvider.ExecuteQuerySingle(CharactersetsPO.class, "Data.Character_sets.Query_Single", 
+				new  IEventRet8Param<String, String>(){
+
+			@Override
+			public String OnEvent(String v) {
+
+				switch (v) {
+				case "CHARACTER_SET_NAME":
+				{
+					return "CHARACTER_SET_NAME";
+				}
+				case "DEFAULT_COLLATE_NAME":
+				{
+					return "DEFAULT_COLLATE_NAME";
+				}
+				case "DESCRIPTION":
+				{
+					return "DESCRIPTION";
+				}
+				case "MAXLEN":
+				{
+					return "MAXLEN";
+				}
+				default:
+				{
+					return null;
+				}
+				}
+			}	
+		});
+		
+		Assert.assertTrue(ret!= null);
+		String str = HiTypeHelper.ToString(CharactersetsPO.class, ret);
+		System.out.print(str);
+		System.out.print("\r\n");
+	}
+	@Test
+	public void Test_DBHelper_ExecuteQuery_Single_null() {
+		CharactersetsPO ret =  DataProvider.ExecuteQuerySingle(CharactersetsPO.class, "Data.Character_sets.Query_Single_null");
+		Assert.assertTrue(ret == null);
+		String str = HiTypeHelper.ToString(CharactersetsPO.class, ret);
+		Assert.assertEquals(str, "");
 	}
 	
 	private String getCurrentPath(){  
